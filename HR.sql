@@ -1,6 +1,4 @@
-0SELECT FIRST_NAME FROM EMPLOYEES WHERE DEPARTMENT_ID =90;
-SELECT FIRST_NAME FROM EMPLOYEES WHERE FIRST_NAME LIKE 'B%';
-SELECT * FROM EMPLOYEES WHERE  SALARY>2000;
-SELECT * FROM EMPLOYEES WHERE EMAIL LIKE 'C%' AND  SALARY>2000;
-SELECT * FROM EMPLOYEES WHERE EMAIL LIKE 'C%' OR  SALARY>2000;
- 
+create user femxa identified by femxa;
+select * from all_users;
+grant connect to femxa;
+grant all privileges to femxa identified by femxa;
