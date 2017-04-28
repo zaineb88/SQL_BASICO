@@ -1,0 +1,65 @@
+-- Sección opcional para declarar variables y tipos
+DECLARE
+
+-- Para usar varrays (arrays), declaramos primero el tipo:
+--               Cantidad  -\/              \/- Tipo contenido
+type palabrasArray is varray(5) of varchar2(10);
+
+-- Usamos el tipo del array
+palabras palabrasArray := palabrasArray('Esto', 'es', 'un', 'array');
+
+-- Forma sencilla de sacar el tipo de una columna
+id PERSONAS.ID%type;
+nombre PERSONAS.NOMBRE%type;
+dni PERSONAS.DNI%type;
+edad PERSONAS.EDAD%TYPE;
+
+-- Registro, o dicho de otra forma, una fila entera (u objeto)
+persona PERSONAS%rowtype;
+
+-- Aquí comienza la ejecución del script
+BEGIN
+
+/* Podemos usar sentencias SQL en el programa, e incluso aprovechar
+las select con su palabra "INTO" para meter el resultado en 
+registros completos, o en variables individuales. */
+SELECT * INTO persona FROM PERSONAS WHERE ID = 5;
+dbms_output.put_line(persona.id || ' , ' || persona.nombre);
+
+ SELECT id, nombre, dni, edad INTO id,nombre,dni,edad FROM PERSONAS WHERE ID = 3;
+ dbms_output.put_line('ID:' || id ||' Nombre: ' || nombre);
+
+-- También podemos realizar inserciones, modificaciones, etc
+INSERT INTO PERSONAS VALUES(7, 'Kiko', '453135A', 33);
+
+
+  -- Condicionales:
+  IF edad > 18 THEN
+    dbms_output.put_line('Es mayor de edad');
+    -- Por si queremos añadir condiciones, "ELSIF"
+  ELSIF edad = 18 THEN
+     dbms_output.put_line('Acaba de cumplir los 18');
+  ELSE
+     dbms_output.put_line('Es menor');
+     -- Cierra siempre el if al final!
+  END IF;
+
+
+-- Podemos anidar loops, y opcionalmente, darles un alias:
+<<loop_de_fuera>>
+FOR i IN 1..3 LOOP
+  <<loop_de_dentro>>
+  FOR j IN 1..5 LOOP
+     dbms_output.put_line(j || ', ' || i);
+  END LOOP loop_de_dentro;
+END LOOP loop_de_fuera;
+
+
+-- Recorrer un array sería tal que así:
+ FOR i IN 1..palabras.count LOOP
+    dbms_output.put_line(palabras(i));
+ END LOOP;
+ 
+ -- Al final del script, siempre poner END; y la barra del siete (/)
+END;
+/

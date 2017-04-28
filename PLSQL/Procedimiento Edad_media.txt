@@ -1,0 +1,23 @@
+CREATE OR REPLACE PROCEDURE EDAD_MEDIA(edad_media OUT NUMBER) AS 
+
+contador NUMBER := 0;
+total_edad NUMBER := 0;
+edad PERSONAS.edad%type;
+CURSOR personas_edad IS SELECT edad INTO edad FROM personas;
+
+BEGIN
+  OPEN personas_edad;
+  LOOP
+  FETCH personas_edad INTO edad;
+  EXIT WHEN personas_edad%notfound;
+  
+  contador := contador+1;
+  total_edad := total_edad + edad;
+  
+  END LOOP;
+  CLOSE personas_edad;
+  
+  edad_media := total_edad / contador;
+  return;
+  
+END EDAD_MEDIA;

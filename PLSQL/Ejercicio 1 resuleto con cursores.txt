@@ -1,0 +1,41 @@
+DECLARE
+
+-- Declaramos un objeto donde guardar cada fila, en cada iteración
+persona PERSONAS%rowtype;
+-- Declaramos el cursor, que básicamente, es la sentencia SELECT que queremos ejecutar e iterar.
+CURSOR personas_select IS SELECT *  FROM PERSONAS WHERE edad>=25;
+
+ 
+BEGIN
+ 
+ dbms_output.put_line('Lista de personas en la BD:');
+ 
+ -- Abrimos el cursor
+  OPEN personas_select;
+  
+  -- Declaramos el bucle
+  LOOP 
+  
+  -- Extraemos del cursor la info, y la metemos en el objeto (también funciona con varias variables)
+  FETCH personas_select INTO persona; 
+  
+  -- Condición de salida: cuando no encuentre datos
+  EXIT WHEN personas_select%notfound;
+    
+    -- Sacamos los datos que encuentra en cada iteración
+      dbms_output.put_line(' - [' || persona.id || '] -  Nombre:' || persona.nombre || ', DNI: ' || persona.dni || '  ('||persona.edad||')'); 
+  
+    -- Cerramos loop
+END LOOP;
+
+-- ¿Y si no encontrase ningún dato?
+EXCEPTION
+
+-- Esto nos permite controlar la excepción en caso de que una sentencia
+-- SQL normal, no encuentre nada (porque no se llega a abrir su propio
+-- cursor).
+WHEN NO_DATA_FOUND THEN 
+     dbms_output.put_line(' No se han encontrado datos');
+
+
+END;
